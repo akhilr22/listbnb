@@ -12,7 +12,7 @@ import ProductDetail from './components/productdetail/ProductDetail';
 function App() {
   return (
     <AuthProvider>
-      <Router>
+      <Router basename="/listbnb">
         <div className="bg-gray-100">
           <Header />
           <Routes>
