@@ -36,8 +36,8 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem('userData');
-    setIsAuthenticated(false);
     Cookies.remove('token');
+    setIsAuthenticated(false);
   };
 
   const registerAndLogin = async(userData) => {

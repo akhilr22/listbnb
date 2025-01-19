@@ -9,7 +9,7 @@ export const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    if (!config.url.includes('/login') && !config.url.includes('/register') ) {
+    if (!config.url.includes('/local')  ) {
       const token = Cookies.get('token'); 
       
       if (token) {
