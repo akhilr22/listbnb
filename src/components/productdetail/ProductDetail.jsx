@@ -4,6 +4,7 @@ import { useFetchProductDetail } from '../../Hooks/useFetchProductDetail';
 const ProductDetail = () => {
   const {productDetail,isLoading} = useFetchProductDetail()
 
+  
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="container mx-auto bg-white rounded-lg shadow-lg p-6">
