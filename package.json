@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://akhilr22.github.io/listbnb/",
+  "homepage": "https://akhilr22.github.io/listbnb",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
