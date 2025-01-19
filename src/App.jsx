@@ -7,6 +7,7 @@ import Header from './components/partials/Header';
 import { AuthProvider, useAuth } from './context/AuthProvider';
 import HomeMain from './components/home/HomeMain';
 import UserProfile from './components/userprofile/UserProfile';
+import ProductDetail from './components/productdetail/ProductDetail';
 
 function App() {
   return (
@@ -15,10 +16,11 @@ function App() {
         <div className="bg-gray-100">
           <Header />
           <Routes>
-  <Route path="/" element={<AuthRoute />} />
-  <Route path="/register" element={<Register />} />
-  <Route path="/userprofile/*" element={<UserProfile />} />
-</Routes>
+            <Route path="/" element={<AuthRoute />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/userprofile/*" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
+            <Route path="/advertisements/:id" element={<PrivateRoute><ProductDetail /></PrivateRoute>} />
+          </Routes>
           <Footer />
         </div>
       </Router>
@@ -33,6 +35,15 @@ function AuthRoute() {
     return <HomeMain />;
   }
   return <Login />;
+}
+
+function PrivateRoute({ children }) {
+  const { isAuthenticated,isLoading } = useAuth();
+  if (!isAuthenticated && !isLoading) {
+    return <Navigate to="/" />; 
+  }
+
+  return children; 
 }
 
 export default App;

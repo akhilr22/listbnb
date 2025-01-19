@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 const AdvertisementCards = ({item}) => {
   return (
-    <Link to={`/ad/${item.id}`}>
+    <Link to={`/advertisements/${item.id}`}>
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
                     <img src={item.image} alt="Product" className="w-full h-48 object-cover" />
                     <div className="p-4">

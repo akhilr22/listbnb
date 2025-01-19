@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { initTWE, Dropdown } from 'tw-elements';
 import { useAuth } from '../../context/AuthProvider';
 import { Link } from 'react-router-dom';
+import useOutsideClick from '../../Hooks/useOutsideClick';
 
 initTWE({ Dropdown });
 
@@ -13,6 +14,12 @@ const Header = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
+  const handleOutsideClick = () => {
+    setDropdownOpen(false); 
+  };
+
+  const ref = useOutsideClick(handleOutsideClick);
+
   return (
     <header className="bg-white shadow-md">
       <div className="container mx-auto flex justify-between items-center py-4 px-6">
@@ -22,7 +29,7 @@ const Header = () => {
 
           </Link>
         </div>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4" >
           {
             isAuthenticated &&  <div className="relative">
             <button
@@ -39,10 +46,12 @@ const Header = () => {
                 loading="lazy"
               />
             </button>
+            {dropdownOpen}
             {dropdownOpen && (
               <ul
                 className="absolute z-[1000] float-left m-0 min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg"
                 aria-labelledby="dropdownMenuButton2"
+                ref={ref}
               >
                 
                 <li>
@@ -54,30 +63,13 @@ const Header = () => {
                   </Link>
                 </li>
                 <li>
-                  <a
+                  <button
                     className="block w-full whitespace-nowrap bg-white px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-zinc-200/60 focus:bg-zinc-200/60"
-                    href="#"
                     onClick={logout}
                   >
                     Logout
-                  </a>
+                  </button>
                 </li>
-                {/* <li>
-                  <a
-                    className="block w-full whitespace-nowrap bg-white px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-zinc-200/60 focus:bg-zinc-200/60"
-                    href="#"
-                  >
-                    test
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className="block w-full whitespace-nowrap bg-white px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-zinc-200/60 focus:bg-zinc-200/60"
-                    href="#"
-                  >
-                    test
-                  </a>
-                </li> */}
               </ul>
             )}
           </div>
@@ -85,8 +77,7 @@ const Header = () => {
        {!isAuthenticated &&  <a href="#" className="text-gray-600 hover:text-gray-900">
             Sign In
           </a>}
-         
-          <a href="#" className="px-4 py-2 bg-pink-600 text-white rounded-full hover:bg-pink-700">
+          <a href="/userprofile/post-ad" className="px-4 py-2 bg-pink-600 text-white rounded-full hover:bg-pink-700">
             Post Your Ad
           </a>
         </div>

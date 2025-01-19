@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import AdvertisementCards from './AdvertisementCards'
-import useFetchAdvertisement from '../../Hooks/useFetchAdvertisement'
+import {useFetchAdvertisement} from '../../Hooks/useFetchAdvertisement'
 
 const FreshRecommedation = () => {
     const {advertisementData,isLoading}  = useFetchAdvertisement()

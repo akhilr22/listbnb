@@ -14,11 +14,11 @@ const UserProfile = () => {
           <SideBar />
           <section className="w-3/4 ml-8">
           <Routes>
-  <Route path="/myaccount" element={<MyAccount />} />
-  <Route path="/profile" element={<ProfileForm />} />
-  <Route path="/ads" element={<Advertisements />} />
-  <Route path="/post-ad" element={<PostAd />} />
-</Routes>
+            <Route path="/myaccount" element={<MyAccount />} />
+            <Route path="/profile" element={<ProfileForm />} />
+            <Route path="/ads" element={<Advertisements />} />
+            <Route path="/post-ad" element={<PostAd />} />
+          </Routes>
           </section>
         </div>
       </main>

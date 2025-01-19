@@ -1,27 +1,23 @@
 import React from 'react'
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
-import { axiosInstance } from '../../utils/axios';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthProvider';
 import loginImage from '../../assets/login.png'
 
 const Register = () => {
     const { register, handleSubmit, formState: { errors } ,watch } = useForm();
-    const { login } = useAuth(); 
+    const { registerAndLogin } = useAuth(); 
+    const navigate = useNavigate()
 
     const onSubmit = async (data) => {
-
         try {
             let reqData = {
                 email : data.email,
                 password:data.password,
                 username:data.username
             } 
-        let response = await axiosInstance.post('api/auth/local/register',reqData)
-        if(response.data?.user){
-            alert("Success")
-            register(response.data?.user); 
-        }
+            await registerAndLogin(reqData)
+            navigate('/')
         } catch (error) {
             alert("Email or Username are already taken")
         }

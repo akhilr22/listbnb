@@ -3,7 +3,7 @@ import { axiosInstance } from '../utils/axios';
 
 const useRegister = (postData) => {
 
-    const [register,setRegister] = useState()
+    const [register, setRegister] = useState()
 
         useEffect(()=>{
             (async () => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import loginImage from '../../assets/login.png';
 import { Link } from 'react-router-dom';
@@ -15,7 +15,7 @@ const Login = () => {
   const onSubmit = async (data) => {
     let loginResponse = await login(data)
     if(loginResponse){
-      alert("success")
+      console.log('Logged in successfully')
     }else{
       alert("something went wrong")
     }

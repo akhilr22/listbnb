@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../../context/AuthProvider';
 
 const SideBar = () => {
   const location = useLocation();
   const currentPath = location.pathname;
+   const { logout } = useAuth();  
 
   const getLinkClass = (path) => (
     currentPath === path
@@ -35,7 +37,7 @@ const SideBar = () => {
           </Link>
         </li>
         <li>
-          <Link to="/logout" className={getLinkClass('/logout')}>
+          <Link onClick={logout}>
             Logout
           </Link>
         </li>

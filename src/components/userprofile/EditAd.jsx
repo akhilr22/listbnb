@@ -1,39 +1,67 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import { axiosInstance } from "../../utils/axios";
+import React, { useEffect } from 'react'
+import { useForm } from 'react-hook-form';
+import { axiosInstance } from '../../utils/axios';
+import { useFetchAdvertisement } from '../../Hooks/useFetchAdvertisement';
 
-const PostAd = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset
-  } = useForm();
+const EditAd = ({item,setEditContainerOpen}) => {
+     const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        reset,
+        setValue
+      } = useForm();
 
-  const onSubmit = (data) => {
-      try {
-        let reqData = {
-          "title": data.title,       
-          "price": parseFloat(data.price),        
-          "description": data.description,
-          "image": data.image
+        const {refetch}  = useFetchAdvertisement()
+      
+
+
+      useEffect(()=>{
+        if(item){
+            setValue('title',item.title)
+            setValue('description',item.description)
+            setValue('image',item.image)
+            setValue('price',item.price)
         }
-          const createAdResponse = axiosInstance.post('/api/advertisements',{...reqData})
-          if(createAdResponse){
-            reset()
-            alert('Ad created successfully ')
-          }
-      } catch (error) {
-        alert('Oops, Something went wrong')
-      }
-  };
+      },[])
 
+
+      const onSubmit = (data) => {
+          let reqData = {
+              "title": data.title,       
+              "price": parseFloat(data.price),        
+              "description": data.description,
+              "image": data.image,
+              'id' : item.id
+            }
+            try {
+                const createAdResponse = axiosInstance.post('/api/advertisements',{...reqData})
+                if(createAdResponse){
+                  reset()
+                  alert('Ad created successfully ')
+                }
+            } catch (error) {
+              alert('Oops, Something went wrong')
+            }
+        };
+
+        const deleteAd = ()=>{
+            try {
+                const createAdResponse = axiosInstance.delete(`/api/advertisements/${item.id}`)
+                if(createAdResponse){
+                    setEditContainerOpen()
+                  reset()
+                  refetch()
+                  alert('Ad created successfully ')
+                }
+            } catch (error) {
+              alert('Oops, Something went wrong')
+            }
+        }
+      
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center">
-      {/* Navbar */}
-      {/* Main Content */}
-      <main className="w-full lg:w-3/4 bg-white shadow-md rounded-lg p-6">
-          <h2 className="text-2xl font-semibold mb-6">Post Ad</h2>
+      <main className="bg-white shadow rounded-lg p-6 ">
+          <h2 className="text-2xl font-semibold mb-6">Edit Ad</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
             {/* Title */}
             <div className="mb-4">
@@ -96,20 +124,17 @@ const PostAd = () => {
               />
               {errors.image && <p className="text-red-500 text-sm">{errors.image.message}</p>}
             </div>
-
             {/* Submit */}
-            <button
-              type="submit"
-              className="w-full bg-pink-500 text-white py-2 px-4 rounded-lg hover:bg-pink-600"
-            >
-              Post
-            </button>
+            <div className="flex items-center space-x-4 justify-end w-full">
+            <button type="submit" className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg" onClick={deleteAd}>Remove</button>
+            <button type="submit" className="bg-pink-500 text-white py-2 px-4 rounded-lg hover:bg-pink-600">Save</button>
+            </div>
+            
           </form>
         </main>
 
-     
-    </div>
-  );
-};
 
-export default PostAd
+  )
+}
+
+export default EditAd

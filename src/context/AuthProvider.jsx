@@ -1,12 +1,14 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { axiosInstance } from '../utils/axios';
 import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userData,setUserData] = useState({})
+  const [isLoading,setLoading] = useState(true)
 
   const login = async (userData) => {
     if(userData){
@@ -20,11 +22,14 @@ export const AuthProvider = ({ children }) => {
             setUserData(loginResponse?.data?.user)
             setIsAuthenticated(true);
             Cookies.set('token', loginResponse?.data?.jwt, { expires: 7, path: '' });
+            setLoading(false)
             return true
           }else{
+          setLoading(false)
             return false
           }
     }else{
+      setLoading(false)
         return false
     }
   };
@@ -35,8 +40,20 @@ export const AuthProvider = ({ children }) => {
     Cookies.remove('token');
   };
 
-  const register = (userData) => {
-    
+  const registerAndLogin = async(userData) => {
+     try {
+      let response = await axiosInstance.post('api/auth/local/register',userData)
+      if(response.data?.user){
+        localStorage.setItem('userData', JSON.stringify(response?.data?.user));
+        setUserData(response?.data?.user)
+        setIsAuthenticated(true);
+        Cookies.set('token', response?.data?.jwt, { expires: 7, path: '' });
+        setLoading(false)
+        return true
+      }
+      } catch (error) {
+        alert("Email or Username are already taken", error)
+      }
   };
 
   useEffect(()=>{
@@ -45,10 +62,11 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(true)
         setUserData(userData)
     }
+    setLoading(false)
   },[])
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login,register,logout,userData }}>
+    <AuthContext.Provider value={{ isAuthenticated, login,registerAndLogin,logout,userData,isLoading }}>
       {children}
     </AuthContext.Provider>
   );

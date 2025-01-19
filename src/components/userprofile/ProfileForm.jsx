@@ -1,33 +1,69 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import useFetchProfileData from '../../Hooks/useFetchProfileData';
+import { axiosInstance } from '../../utils/axios';
 
 const ProfileForm = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue
   } = useForm();
 
-  const onSubmit = (data) => {
+  const {userProfile,isLoading} =  useFetchProfileData()
+
+  useEffect(()=>{
+    if(!isLoading){
+      setValue("firstName", userProfile.firstName)
+      setValue("lastName", userProfile.lastName)
+      setValue("email", userProfile.email)
+      setValue("username", userProfile.username)
+      setValue("location", userProfile.location)
+      setValue("phone", userProfile.phone)
+
+    }
+  },[userProfile])
+
+  const onSubmit = async (data) => {
+    try {
+     let response = await axiosInstance.put('api/profile',data)
+     if(response.data){
+      alert('Success')
+     }
+    } catch (error) {
+      alert('something went wrong')
+    }
     console.log(data);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-12 rounded shadow-lg max-w-2xl w-full">
+    <div className="bg-white p-12 rounded shadow-lg max-w-2xl w-full">
         <h2 className="text-3xl font-bold mb-8 text-center">Profile</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div>
-            <label className="block text-lg font-medium mb-2" htmlFor="name">
-              Name*
+            <label className="block text-lg font-medium mb-2" htmlFor="firstName">
+              First Name*
             </label>
             <input
               type="text"
-              id="name"
-              {...register('name', { required: 'Name is required' })}
+              id="firstName"
+              {...register('firstName', { required: 'Frist Name is required' })}
               className="w-full px-5 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 text-lg"
             />
-            {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
+            {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>}
+          </div>
+          <div>
+            <label className="block text-lg font-medium mb-2" htmlFor="lastName">
+              Last Name*
+            </label>
+            <input
+              type="text"
+              id="lastName"
+              {...register('lastName', { required: 'Name is required' })}
+              className="w-full px-5 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 text-lg"
+            />
+            {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>}
           </div>
 
           <div>
@@ -64,12 +100,12 @@ const ProfileForm = () => {
 
           <div>
             <label className="block text-lg font-medium mb-2" htmlFor="photo">
-              Photo (URL)*
+              Photo (URL)
             </label>
             <input
               type="url"
               id="photo"
-              {...register('photo', { required: 'Photo URL is required' })}
+              {...register('photo')}
               className="w-full px-5 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 text-lg"
             />
             {errors.photo && <p className="text-red-500 text-sm mt-1">{errors.photo.message}</p>}
@@ -89,13 +125,13 @@ const ProfileForm = () => {
           </div>
 
           <div>
-            <label className="block text-lg font-medium mb-2" htmlFor="contactNumber">
+            <label className="block text-lg font-medium mb-2" htmlFor="phone">
               Contact Number*
             </label>
             <input
               type="tel"
-              id="contactNumber"
-              {...register('contactNumber', {
+              id="phone"
+              {...register('phone', {
                 required: 'Contact Number is required',
                 pattern: {
                   value: /^[0-9]{10,15}$/,
@@ -104,7 +140,7 @@ const ProfileForm = () => {
               })}
               className="w-full px-5 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 text-lg"
             />
-            {errors.contactNumber && <p className="text-red-500 text-sm mt-1">{errors.contactNumber.message}</p>}
+            {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>}
           </div>
 
           <button
@@ -115,7 +151,6 @@ const ProfileForm = () => {
           </button>
         </form>
       </div>
-    </div>
   );
 };
 

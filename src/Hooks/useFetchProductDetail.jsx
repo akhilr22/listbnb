@@ -1,16 +1,19 @@
 import { useState, useEffect } from 'react';
 import { axiosInstance } from '../utils/axios';
+import { useParams } from 'react-router-dom';
 
-export function useFetchAdvertisement() {
-  const [advertisementData, setAdvertisementData] = useState([]);
+export function useFetchProductDetail() {
+  const [productDetail, setProductDetail] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const { id } = useParams();
 
-  const fetchAdvertisement = async () => {
+  const fetchProductDetail = async () => {
     setIsLoading(true);
     try {
-        let response = await axiosInstance.get('api/advertisements')
+        
+        let response = await axiosInstance.get(`api/advertisements/${id}`)
         if(response.data){
-            setAdvertisementData(response.data)
+            setProductDetail(response.data)
         }
         setIsLoading(false)
     } catch (error) {
@@ -21,8 +24,8 @@ export function useFetchAdvertisement() {
   };
 
   useEffect(() => {
-    fetchAdvertisement();
+    fetchProductDetail();
   }, []); 
 
-  return { advertisementData, isLoading, refetch: fetchAdvertisement };
+  return { productDetail, isLoading };
 }
