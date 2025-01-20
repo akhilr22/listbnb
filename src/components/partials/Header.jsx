@@ -77,9 +77,9 @@ const Header = () => {
        {!isAuthenticated &&  <a href="#" className="text-gray-600 hover:text-gray-900">
             Sign In
           </a>}
-          <a href="/userprofile/post-ad" className="px-4 py-2 bg-pink-600 text-white rounded-full hover:bg-pink-700">
+          <Link to="/userprofile/post-ad" className="px-4 py-2 bg-pink-600 text-white rounded-full hover:bg-pink-700">
             Post Your Ad
-          </a>
+          </Link>
         </div>
         
       </div>
